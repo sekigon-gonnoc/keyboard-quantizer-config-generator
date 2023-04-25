@@ -1,0 +1,559 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "type": "array",
+  "contains": {
+    "$ref": "#/definitions/Application"
+  },
+  "items": {
+    "oneOf": [
+      {
+        "$ref": "#/definitions/Application"
+      },
+      {
+        "$ref": "#/definitions/PerKeyOption"
+      },
+      {
+        "$ref": "#/definitions/DefaultValues"
+      }
+    ]
+  },
+  "definitions": {
+    "Application": {
+      "type": "object",
+      "properties": {
+        "application": {
+          "type": "object",
+          "properties": {
+            "title": {
+              "type": "string"
+            },
+            "process": {
+              "type": "string"
+            },
+            "url": {
+              "type": "string"
+            },
+            "ime_mode": {
+              "type": "integer"
+            },
+            "ime_on": {
+              "type": "integer"
+            },
+            "keymaps": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/Keymap"
+              }
+            },
+            "combos": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/Combo"
+              }
+            },
+            "leaders": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/Leader"
+              }
+            },
+            "overrides": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/KeyOverride"
+              }
+            }
+          },
+          "additionalProperties": false
+        }
+      },
+      "required": [
+        "application"
+      ]
+    },
+    "PerKeyOption": {
+      "type": "object",
+      "properties": {
+        "per_key_option": {
+          "type": "object",
+          "additionalProperties": {
+            "type": "object",
+            "properties": {
+              "tapping_term": {
+                "type": "integer"
+              },
+              "quick_tap_term": {
+                "type": "integer"
+              },
+              "permissive_hold": {
+                "type": "boolean"
+              },
+              "hold_on_other_key_press": {
+                "type": "boolean"
+              },
+              "retro_tapping": {
+                "type": "boolean"
+              }
+            }
+          }
+        }
+      },
+      "required": [
+        "per_key_option"
+      ]
+    },
+    "DefaultValues": {
+      "type": "object",
+      "properties": {
+        "default": {
+          "type": "object",
+          "properties": {
+            "combo_term": {
+              "type": "integer"
+            },
+            "combo_press_in_order": {
+              "type": "boolean"
+            },
+            "tapping_term": {
+              "type": "integer"
+            },
+            "quick_tap_term": {
+              "type": "integer"
+            },
+            "permissive_hold": {
+              "type": "boolean"
+            },
+            "hold_on_other_key_press": {
+              "type": "boolean"
+            },
+            "retro_tapping": {
+              "type": "boolean"
+            },
+            "keyboard_language": {
+              "enum": [
+                "US",
+                "JP"
+              ]
+            },
+            "os_language": {
+              "enum": [
+                "US",
+                "JP"
+              ]
+            },
+            "mouse_gesture_threshold": {
+              "type": "integer"
+            }
+          }
+        }
+      },
+      "required": [
+        "default"
+      ]
+    },
+    "Keymap": {
+      "type": "object",
+      "properties": {
+        "keymap": {
+          "type": "object",
+          "required": [
+            "layer",
+            "map"
+          ],
+          "properties": {
+            "layer": {
+              "type": "integer"
+            },
+            "map": {
+              "type": "object",
+              "additionalProperties": {
+                "$ref": "#/definitions/Action"
+              }
+            }
+          }
+        }
+      },
+      "required": [
+        "keymap"
+      ]
+    },
+    "Combo": {
+      "type": "object",
+      "properties": {
+        "combo": {
+          "type": "object",
+          "required": [
+            "keys",
+            "keycode"
+          ],
+          "properties": {
+            "keys": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            },
+            "keycode": {
+              "$ref": "#/definitions/Action"
+            },
+            "term": {
+              "type": "integer"
+            },
+            "only": {
+              "enum": [
+                "None",
+                "Tap",
+                "Hold",
+                "none",
+                "tap",
+                "hold"
+              ]
+            },
+            "press_in_order":{
+              "type": "boolean"
+            },
+            "layer":{
+              "type": "integer"
+            }
+          }
+        }
+      },
+      "required": [
+        "combo"
+      ]
+    },
+    "Leader": {
+      "type": "object",
+      "properties": {
+        "leader": {
+          "type": "object",
+          "required": [
+            "keys",
+            "keycode"
+          ],
+          "properties": {
+            "keys": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            },
+            "keycode": {
+              "$ref": "#/definitions/Action"
+            }
+          }
+        }
+      },
+      "required": [
+        "leader"
+      ]
+    },
+    "KeyOverride": {
+      "oneOf": [
+        {
+          "$ref": "#/definitions/KeyOverride/basic"
+        },
+        {
+          "$ref": "#/definitions/KeyOverride/w_layer"
+        },
+        {
+          "$ref": "#/definitions/KeyOverride/w_layer_neg"
+        },
+        {
+          "$ref": "#/definitions/KeyOverride/w_layer_neg_opt"
+        }
+      ],
+      "basic": {
+        "type": "object",
+        "properties": {
+          "basic": {
+            "type": "object",
+            "properties": {
+              "trigger_mods": {
+                "$ref": "#/definitions/KeyOverride/modMaskType"
+              },
+              "trigger_key": {
+                "type": "string"
+              },
+              "replacement_key": {
+                "type": "string"
+              }
+            },
+            "additionalProperties": false,
+            "required": [
+              "trigger_mods",
+              "trigger_key",
+              "replacement_key"
+            ]
+          }
+        },
+        "required": [
+          "basic"
+        ]
+      },
+      "w_layer": {
+        "type": "object",
+        "properties": {
+          "w_layer": {
+            "type": "object",
+            "properties": {
+              "trigger_mods": {
+                "$ref": "#/definitions/KeyOverride/modMaskType"
+              },
+              "trigger_key": {
+                "type": "string"
+              },
+              "replacement_key": {
+                "type": "string"
+              },
+              "layers": {
+                "type": "integer"
+              }
+            },
+            "additionalProperties": false,
+            "required": [
+              "trigger_mods",
+              "trigger_key",
+              "replacement_key",
+              "layers"
+            ]
+          }
+        },
+        "required": [
+          "w_layer"
+        ]
+      },
+      "w_layer_neg": {
+        "type": "object",
+        "properties": {
+          "w_layer_neg": {
+            "type": "object",
+            "properties": {
+              "trigger_mods": {
+                "$ref": "#/definitions/KeyOverride/modMaskType"
+              },
+              "trigger_key": {
+                "type": "string"
+              },
+              "replacement_key": {
+                "type": "string"
+              },
+              "layers": {
+                "type": "integer"
+              },
+              "negative_mask": {
+                "$ref": "#/definitions/KeyOverride/modMaskType"
+              }
+            },
+            "additionalProperties": false,
+            "required": [
+              "trigger_mods",
+              "trigger_key",
+              "replacement_key",
+              "layers",
+              "negative_mask"
+            ]
+          }
+        },
+        "required": [
+          "w_layer_neg"
+        ]
+      },
+      "w_layer_neg_opt": {
+        "type": "object",
+        "properties": {
+          "w_layer_neg_opt": {
+            "type": "object",
+            "properties": {
+              "trigger_mods": {
+                "$ref": "#/definitions/KeyOverride/modMaskType"
+              },
+              "trigger_key": {
+                "type": "string"
+              },
+              "replacement_key": {
+                "type": "string"
+              },
+              "layers": {
+                "type": "integer"
+              },
+              "negative_mask": {
+                "$ref": "#/definitions/KeyOverride/modMaskType"
+              },
+              "options": {
+                "type": "array",
+                "items": {
+                  "enum": [
+                    "activation_trigger_down",
+                    "activation_required_mod_down",
+                    "activation_negative_mod_up",
+                    "all_activations",
+                    "one_mod",
+                    "no_reregister_trigger",
+                    "no_unregister_on_other_key_down",
+                    "default"
+                  ]
+                }
+              }
+            },
+            "additionalProperties": false,
+            "required": [
+              "trigger_mods",
+              "trigger_key",
+              "replacement_key",
+              "layers",
+              "negative_mask",
+              "options"
+            ]
+          }
+        },
+        "required": [
+          "w_layer_neg_opt"
+        ]
+      },
+      "modMaskType": {
+        "type": "array",
+        "items": {
+          "type": "string",
+          "enum": [
+            "Shift",
+            "Alt",
+            "Ctrl",
+            "Gui"
+          ]
+        }
+      }
+    },
+    "Action": {
+      "oneOf": [
+        {
+          "type": "string"
+        },
+        {
+          "$ref": "#/definitions/Macro"
+        },
+        {
+          "$ref": "#/definitions/Command"
+        },
+        {
+          "$ref": "#/definitions/UnicodeString"
+        },
+        {
+          "$ref": "#/definitions/TapDance"
+        }
+      ]
+    },
+    "Macro": {
+      "type": "object",
+      "properties": {
+        "macro": {
+          "type": "array",
+          "items": {
+            "oneOf": [
+              {
+                "type": "object",
+                "properties": {
+                  "action": {
+                    "type": "string",
+                    "enum": [
+                      "tap",
+                      "down",
+                      "up"
+                    ]
+                  },
+                  "keycodes": {
+                    "type": "array",
+                    "items": {
+                      "type": "string"
+                    },
+                    "minItems": 1
+                  }
+                },
+                "required": [
+                  "action",
+                  "keycodes"
+                ],
+                "additionalProperties": false
+              },
+              {
+                "type": "object",
+                "properties": {
+                  "action": {
+                    "type": "string",
+                    "const": "delay"
+                  },
+                  "duration": {
+                    "type": "integer"
+                  }
+                },
+                "required": [
+                  "action",
+                  "duration"
+                ],
+                "additionalProperties": false
+              },
+              {
+                "type": "string"
+              }
+            ]
+          },
+          "minItems": 1
+        }
+      },
+      "required": [
+        "macro"
+      ],
+      "additionalProperties": false
+    },
+    "Command": {
+      "type": "object",
+      "properties": {
+        "command": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "command"
+      ],
+      "additionalProperties": false
+    },
+    "UnicodeString": {
+      "type": "object",
+      "properties": {
+        "unicode_string": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "unicode_string"
+      ],
+      "additionalProperties": false
+    },
+    "TapDance": {
+      "type": "object",
+      "properties": {
+        "tap_dance": {
+          "type": "object",
+          "properties": {
+            "single_tap": {
+              "$ref": "#/definitions/Action"
+            },
+            "single_hold": {
+              "$ref": "#/definitions/Action"
+            },
+            "double_tap": {
+              "$ref": "#/definitions/Action"
+            },
+            "double_hold": {
+              "$ref": "#/definitions/Action"
+            }
+          },
+          "additionalProperties": false
+        }
+      },
+      "required": [
+        "tap_dance"
+      ]
+    }
+  }
+}

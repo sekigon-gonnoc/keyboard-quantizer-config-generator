@@ -1,0 +1,26 @@
+{
+  "0x01": {
+    "key": "MOD_LCTL"
+  },
+  "0x02": {
+    "key": "MOD_LSFT"
+  },
+  "0x04": {
+    "key": "MOD_LALT"
+  },
+  "0x08": {
+    "key": "MOD_LGUI"
+  },
+  "0x11": {
+    "key": "MOD_RCTL"
+  },
+  "0x12": {
+    "key": "MOD_RSFT"
+  },
+  "0x14": {
+    "key": "MOD_RALT"
+  },
+  "0x18": {
+    "key": "MOD_RGUI"
+  }
+}

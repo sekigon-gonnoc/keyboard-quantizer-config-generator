@@ -1,0 +1,56 @@
+{
+    "0x7e00": {
+        "key": "QK_KB_0",
+        "aliases": [
+            "MS_GESTURE_DR"
+        ]
+    },
+    "0x7e01": {
+        "key": "QK_KB_1",
+        "aliases": [
+            "MS_GESTURE_DL"
+        ]
+    },
+    "0x7e02": {
+        "key": "QK_KB_2",
+        "aliases": [
+            "MS_GESTURE_UL"
+        ]
+    },
+    "0x7e03": {
+        "key": "QK_KB_3",
+        "aliases": [
+            "MS_GESTURE_UR"
+        ]
+    },
+    "0x7e04": {
+        "key": "QK_KB_4",
+        "aliases": [
+            "LAUNCH_COMPANION"
+        ]
+    },
+    "0x7e05": {
+        "key": "QK_KB_5",
+        "aliases": [
+            "SET_KB_LANG_US"
+        ]
+    },
+    "0x7e06": {
+        "key": "QK_KB_6",
+        "aliases": [
+            "SET_KB_LANG_JP"
+        ]
+    },
+    "0x7e07": {
+        "key": "QK_KB_7",
+        "aliases": [
+            "SET_OS_LANG_US"
+        ]
+    },
+    "0x7e08": {
+        "key": "QK_KB_8",
+        "aliases": [
+            "SET_OS_LANG_JP"
+        ]
+    }
+}

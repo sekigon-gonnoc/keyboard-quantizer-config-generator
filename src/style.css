@@ -1,0 +1,57 @@
+:root {
+  color-scheme: light dark;
+}
+
+body {
+  background: var(--background-color);
+  display: flex;
+  flex-flow: column;
+  font-family: sans-serif;
+  height: 100vh;
+  margin: 0;
+}
+
+#editor {
+  flex: 80%;
+  max-height: 80vh;
+}
+
+#problems {
+  border-top: 1px solid var(--shadow-color);
+  flex: 20%;
+  color: var(--foreground-color);
+  overflow-y: scroll;
+}
+
+#controls {
+  display: flex;
+  flex-direction: row;
+  height: 3em;
+}
+
+#controls > button {
+  flex: 1;
+}
+
+.problem {
+  align-items: center;
+  cursor: pointer;
+  display: flex;
+  padding: 0.25rem;
+}
+
+.problem:hover {
+  background-color: var(--shadow-color);
+}
+
+.problem-text {
+  margin-left: 0.5rem;
+}
+
+.problem .codicon-warning {
+  color: var(--warning-color);
+}
+
+.problem .codicon-error {
+  color: var(--error-color);
+}

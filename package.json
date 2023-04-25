@@ -1,0 +1,43 @@
+{
+  "name": "keyboard-quantizer-config-generator",
+  "private": true,
+  "version": "0.0.0",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "tsc && vite build",
+    "preview": "vite preview",
+    "test": "vitest",
+    "test:run": "vitest run",
+    "lint": "eslint --ext .tsx,.ts src/",
+    "convert": "node src/keycode_table/keycode_table_converter.js"
+  },
+  "devDependencies": {
+    "@esbuild-plugins/node-globals-polyfill": "^0.2.3",
+    "@esbuild-plugins/node-modules-polyfill": "^0.2.2",
+    "@types/js-yaml": "^4.0.5",
+    "@types/pako": "^2.0.0",
+    "@typescript-eslint/eslint-plugin": "^5.43.0",
+    "eslint": "^8.0.1",
+    "eslint-config-prettier": "^8.8.0",
+    "eslint-config-standard-with-typescript": "^34.0.1",
+    "eslint-plugin-import": "^2.25.2",
+    "eslint-plugin-n": "^15.0.0",
+    "eslint-plugin-promise": "^6.0.0",
+    "node-fetch": "^3.3.1",
+    "prettier": "^2.8.8",
+    "typescript": "*",
+    "vite": "^4.3.0",
+    "vite-plugin-monaco-editor": "^1.1.0",
+    "vitest": "^0.30.1"
+  },
+  "dependencies": {
+    "crc": "^4.3.2",
+    "js-yaml": "^4.1.0",
+    "monaco-editor": "^0.37.1",
+    "monaco-yaml": "^4.0.4",
+    "node-c-struct": "git+https://github.com/sekigon-gonnoc/node-cstruct",
+    "pako": "^2.1.0",
+    "ts-pattern": "^4.2.2"
+  }
+}

@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="stylesheet" href="/src/style.css" type="text/css">
+  <title>Keyboard Quantizer Config Generator</title>
+</head>
+
+<body>
+  <div id="editor"></div>
+  <div id="controls">
+    <button id="uploadButton">Upload</button>
+    <button id="binButton">Download BIN</button>
+    <button id="uf2Button">Download UF2</button>
+    <input type="file" id="uploadFile" accept=".bin,.uf2" style="display: none" ; />
+  </div>
+  <div id="problems"></div>
+  <script type="module" src="/src/main.ts"></script>
+</body>
+
+</html>
