@@ -10,6 +10,8 @@ import { setDiagnosticsOptions } from "monaco-yaml";
 import * as KeyCodeTable from "./keycode_table/keycode_table_converted.json";
 import { KeycodeFunctions } from "./keycodes.ts";
 import pako from "pako";
+import { Buffer } from "buffer";
+globalThis.Buffer = Buffer;
 
 const ADDRESS_OFFSET = 0x1010_0000;
 const CONFIG_LENGTH_MAX = 0x000f_0000;
