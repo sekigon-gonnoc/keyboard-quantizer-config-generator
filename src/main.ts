@@ -64,12 +64,13 @@ languages.registerCompletionItemProvider("yaml", {
       endColumn: word.endColumn,
     };
     const suggestions = [
-      ...Object.keys(KeyCodeTable).map((k) => {
+      ...Object.entries(KeyCodeTable).map(([key, value]) => {
         const item: languages.CompletionItem = {
-          label: k,
+          label: key,
           kind: languages.CompletionItemKind.Keyword,
-          insertText: k,
+          insertText: key,
           range,
+          detail: "0x" + ("0000" + value.toString(16).toUpperCase()).slice(-4),
         };
         return item;
       }),

@@ -31,7 +31,7 @@ const userTable = filePaths.map(filePath => {
 
 const settings = { method: "Get" };
 
-const [kt, range] = await fetch("https://keyboards.qmk.fm/v1/constants/keycodes_0.0.2.json", settings)
+const [keycodeBase, range] = await fetch("https://keyboards.qmk.fm/v1/constants/keycodes_0.0.2.json", settings)
   .then(res => res.json())
   .then((json) => {
     const kt = convertKeycodeTableToNumberTable(json.keycodes);
@@ -43,6 +43,27 @@ const [kt, range] = await fetch("https://keyboards.qmk.fm/v1/constants/keycodes_
     return [kt, range];
   });
 
-const convertedTable = { ...kt, ...userTable };
+const keycodeAliases = await fetch("https://keyboards.qmk.fm/v1/constants/keycodes_us_0.0.1.json", settings)
+  .then(res => res.json())
+  .then((json) => {
+    const kt = {};
+
+    for (const [keyCodeExpr, value] of Object.entries(json.aliases)) {
+      const match = keyCodeExpr.match(/^S\((.*)\)/);
+      if (match.length > 1) {
+        const keycodeNumber = keycodeBase[match[1]] | (2 << 8);
+        kt[value.key] = keycodeNumber;
+        if (value.aliases) {
+          for (const alias of value.aliases) {
+            kt[alias] = keycodeNumber;
+          }
+        }
+      }
+    }
+
+    return kt;
+  });
+
+const convertedTable = { ...keycodeBase, ...keycodeAliases, ...userTable };
 fs.writeFileSync(outputFilePath + "keycode_table_converted.json", JSON.stringify(convertedTable, null, 2));
 fs.writeFileSync(outputFilePath + "quantum_keycode_range.json", JSON.stringify(range, null, 2));
