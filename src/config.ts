@@ -52,6 +52,8 @@ interface CConfigProperty {
   version: number;
   crc16: number;
   body_length: number;
+  yaml_len: number;
+  yaml_address: number;
   default: CDefaultValuesProperty;
   applications_len: number;
   applications_address: number;
@@ -61,8 +63,6 @@ interface CConfigProperty {
   per_key_option_address: number;
   macros_len: number;
   macros_address: number;
-  yaml_len: number;
-  yaml_address: number;
 }
 export class CConfig extends struct.struct<CConfigProperty> {
   static get fields(): any {
@@ -71,6 +71,8 @@ export class CConfig extends struct.struct<CConfigProperty> {
       ["version", struct.uint16_t],
       ["crc16", struct.uint16_t],
       ["body_length", struct.uint32_t],
+      ["yaml_len", struct.size_t],
+      ["yaml_address", struct.size_t],
       ["default", CDefaultValues],
       ["applications_len", struct.size_t],
       ["applications_address", struct.size_t],
@@ -80,8 +82,6 @@ export class CConfig extends struct.struct<CConfigProperty> {
       ["per_key_option_address", struct.size_t],
       ["macros_len", struct.size_t],
       ["macros_address", struct.size_t],
-      ["yaml_len", struct.size_t],
-      ["yaml_address", struct.size_t],
     ];
   }
 }
@@ -209,9 +209,11 @@ export class ConfigConverter {
     this.cConfig = new CConfig();
     this.cConfig.$value = {
       magic_number: 0x999b999b,
-      version: 9,
+      version: 10,
       crc16: 0,
       body_length: 0,
+      yaml_len: yamlLength,
+      yaml_address: yamlAddress,
       default: ConvertDefaultValues(this.config.defaultValues).$value,
       applications_address: appAddress,
       applications_len: appLength,
@@ -221,8 +223,6 @@ export class ConfigConverter {
       per_key_option_len: optionLength,
       macros_address: macroAddress,
       macros_len: macroLength,
-      yaml_len: yamlLength,
-      yaml_address: yamlAddress,
     };
 
     const buffer = concatBuffers([
@@ -235,8 +235,10 @@ export class ConfigConverter {
       yamlData,
     ]);
 
+    // set crc to buffer
     const crc = crc16(buffer.slice(12), 0xffff) ^ 0xffff;
     buffer.set([crc & 0xff, crc >> 8], 6);
+    // set body_length to buffer
     const bodyLength = buffer.length - 12;
     buffer.set(
       [
