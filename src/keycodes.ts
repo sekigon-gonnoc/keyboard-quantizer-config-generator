@@ -1,6 +1,6 @@
 import { uint16_t } from "node-c-struct";
-import * as KeyCodeTable from "./keycode_table/keycode_table_converted.json";
-import * as QkRange from "./keycode_table/quantum_keycode_range.json";
+import KeyCodeTable from "./keycode_table/keycode_table_converted.json";
+import QkRange from "./keycode_table/quantum_keycode_range.json";
 import { type Action } from "./action";
 import { match, P } from "ts-pattern";
 

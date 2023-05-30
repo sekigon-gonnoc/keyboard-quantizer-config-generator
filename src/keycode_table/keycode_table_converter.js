@@ -18,6 +18,7 @@ function convertKeycodeTableToNumberTable(keycodeTable) {
 const filePaths = [
   "src/keycode_table/mod_keycodes.json",
   "src/keycode_table/quantizer_keycodes.json",
+  "src/keycode_table/character_keycodes.json",
   "src/keycode_table/user_keycodes.json",
 ];
 const outputFilePath = "src/keycode_table/";

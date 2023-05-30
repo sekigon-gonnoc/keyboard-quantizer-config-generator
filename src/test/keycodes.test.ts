@@ -5,6 +5,8 @@ test("BasicKeycodes", () => {
   expect(Keycodes.ConvertAction("KC_A")).toBe(4);
   expect(Keycodes.ConvertAction("KC_TRNS")).toBe(1);
 
+  expect(Keycodes.ConvertAction("-")).toBe(45);
+  expect(Keycodes.ConvertAction("|")).toBe(0x231);
   expect(() => Keycodes.ConvertAction("UNKNOWN")).toThrowError();
 });
 
