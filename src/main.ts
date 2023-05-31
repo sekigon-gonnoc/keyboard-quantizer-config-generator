@@ -124,48 +124,45 @@ editor.onDidChangeMarkers(([resource]) => {
 const decoder = new TextDecoder();
 const binButton = document.getElementById("binButton") as HTMLButtonElement;
 const uf2Button = document.getElementById("uf2Button") as HTMLButtonElement;
+const uploadButton = document.getElementById(
+  "uploadButton"
+) as HTMLButtonElement;
 const uploadFile = document.getElementById("uploadFile") as HTMLInputElement;
 
-(document.getElementById("uploadButton") as HTMLButtonElement).addEventListener(
-  "click",
-  () => {
-    document.getElementById("uploadFile")?.click();
-  }
-);
+uploadButton.addEventListener("click", () => {
+  document.getElementById("uploadFile")?.click();
+});
 
-(document.getElementById("uploadFile") as HTMLInputElement).addEventListener(
-  "change",
-  () => {
-    const file = uploadFile.files?.[0];
-    if (file == null) return;
-    const reader = new FileReader();
+uploadFile.addEventListener("change", () => {
+  const file = uploadFile.files?.[0];
+  if (file == null) return;
+  const reader = new FileReader();
 
-    reader.onload = async () => {
-      const raw: ArrayBuffer = await file.arrayBuffer();
-      const extension = file.name.slice(file.name.lastIndexOf(".") + 1);
+  reader.onload = async () => {
+    const raw: ArrayBuffer = await file.arrayBuffer();
+    const extension = file.name.slice(file.name.lastIndexOf(".") + 1);
 
-      const buf = extension.toLowerCase() === "uf2" ? convertToBin(raw) : raw;
+    const buf = extension.toLowerCase() === "uf2" ? convertToBin(raw) : raw;
 
-      try {
-        // load array buffer to config header
-        const config = new CConfig(null, {
-          buffer: new Uint8Array(buf.slice(0, CConfig.byteSize)),
-        });
-        // load config yaml file to editor
-        editor.getEditors()[0].setValue(
-          // unzip yaml data which is appended at bottom of config binary
-          decoder.decode(
-            pako.ungzip(buf.slice(config.$value.yaml_address - ADDRESS_OFFSET))
-          )
-        );
-      } catch (error) {
-        alert(error);
-      }
-    };
+    try {
+      // load array buffer to config header
+      const config = new CConfig(null, {
+        buffer: new Uint8Array(buf.slice(0, CConfig.byteSize)),
+      });
+      // load config yaml file to editor
+      editor.getEditors()[0].setValue(
+        // unzip yaml data which is appended at bottom of config binary
+        decoder.decode(
+          pako.ungzip(buf.slice(config.$value.yaml_address - ADDRESS_OFFSET))
+        )
+      );
+    } catch (error) {
+      alert(error);
+    }
+  };
 
-    reader.readAsArrayBuffer(file);
-  }
-);
+  reader.readAsArrayBuffer(file);
+});
 
 function downloadBinaryFile(data: Uint8Array, fileName: string): void {
   const blob = new Blob([data], { type: "application/octet-stream" });
@@ -215,6 +212,19 @@ uf2Button.addEventListener("click", () => {
   } catch (error) {
     console.error(error);
     alert(error);
+  }
+});
+
+document.addEventListener("keydown", function (event) {
+  if (event.ctrlKey && event.key === "s") {
+    event.preventDefault();
+    uf2Button.click();
+  } else if (event.ctrlKey && event.key === "o") {
+    uploadButton.click();
+  } else if (event.ctrlKey && event.key === "p") {
+    event.preventDefault();
+    ed?.focus();
+    ed?.trigger("", "editor.action.quickCommand", null);
   }
 });
 
