@@ -4,6 +4,7 @@ import { Keycodes } from "../keycodes";
 test("BasicKeycodes", () => {
   expect(Keycodes.ConvertAction("KC_A")).toBe(4);
   expect(Keycodes.ConvertAction("KC_TRNS")).toBe(1);
+  expect(Keycodes.ConvertAction("S")).toBe(22);
 
   expect(Keycodes.ConvertAction("-")).toBe(45);
   expect(Keycodes.ConvertAction("|")).toBe(0x231);
@@ -12,6 +13,7 @@ test("BasicKeycodes", () => {
 
 test("WithModsKeycodes", () => {
   expect(Keycodes.ConvertAction("LSFT(KC_A)")).toBe(0x200 | 4);
+  expect(Keycodes.ConvertAction("S(KC_A)")).toBe(0x200 | 4);
 });
 
 test("LtKeycodes", () => {

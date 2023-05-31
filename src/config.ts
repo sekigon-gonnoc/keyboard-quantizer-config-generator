@@ -156,9 +156,9 @@ export class ConfigConverter {
       (action: Action) => this.convertAction(action)
     );
 
-    this.byteOffset += cApps.reduce(
+    this.byteOffset += cApps.ApplicationData.reduce(
       (acc, buf) => acc + buf.$arrayBuffer.byteLength,
-      0
+      cApps.cApplications.$arrayBuffer.byteLength
     );
 
     const tapDanceAddress = this.byteOffset;
@@ -209,7 +209,7 @@ export class ConfigConverter {
     this.cConfig = new CConfig();
     this.cConfig.$value = {
       magic_number: 0x999b999b,
-      version: 10,
+      version: 11,
       crc16: 0,
       body_length: 0,
       yaml_len: yamlLength,
@@ -227,7 +227,8 @@ export class ConfigConverter {
 
     const buffer = concatBuffers([
       this.cConfig.$arrayBuffer,
-      ...cApps.flatMap((x) => x.$arrayBuffer),
+      cApps.cApplications.$arrayBuffer,
+      ...cApps.ApplicationData.flatMap((x) => x.$arrayBuffer),
       cTapDances.cTapDances.$arrayBuffer,
       cOptions.cPerKeyOptions.$arrayBuffer,
       cMacros.macroAddress.$arrayBuffer,

@@ -33,6 +33,10 @@
             "url": {
               "type": "string"
             },
+            "os_variant": {
+              "type": "string",
+              "enum": ["Any", "Linux", "Windows", "macOS", "iOS"]
+            },
             "ime_mode": {
               "type": "integer"
             },

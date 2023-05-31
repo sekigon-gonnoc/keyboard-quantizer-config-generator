@@ -12,6 +12,7 @@ export interface Application {
     title?: string;
     process?: string;
     url?: string;
+    os_variant?: keyof typeof OsVariant;
     ime_mode?: number;
     ime_on?: number;
     keymaps?: Keymap[];
@@ -20,6 +21,14 @@ export interface Application {
     overrides?: KeyOverride[];
   };
 }
+
+const OsVariant = {
+  Any: 0,
+  Linux: 1,
+  Windows: 2,
+  macOS: 3,
+  iOS: 4,
+};
 
 export const EmptyApplication: Application = {
   application: {},
@@ -30,6 +39,10 @@ export function isApplication(item: any): item is Application {
 }
 
 interface CApplicationProperty {
+  title: number;
+  process: number;
+  url: number;
+  os_variant: number;
   ime_mode: number;
   ime_on: number;
   keymap_len: number;
@@ -48,6 +61,7 @@ export class CApplication extends struct.struct<CApplicationProperty> {
       ["title", struct.size_t],
       ["process", struct.size_t],
       ["url", struct.size_t],
+      ["os_variant", struct.uint8_t],
       ["ime_mode", struct.int16_t],
       ["ime_on", struct.int16_t],
       ["keymap_len", struct.size_t],
@@ -67,7 +81,10 @@ export function ConvertApplication(
   baseOffset: number = 0,
   defaultValues: DefaultValues,
   keycodeConverter: (action: Action) => number = Keycodes.ConvertAction
-): Array<struct.array<any>> {
+): {
+  cApplications: struct.array<CApplication>;
+  ApplicationData: Array<struct.array<any>>;
+} {
   const cApplications = new (CApplication.times(applications.length))();
 
   let addressOffset = baseOffset + cApplications.$buffer.byteLength;
@@ -168,6 +185,7 @@ export function ConvertApplication(
       title: titleOffset,
       process: processOffset,
       url: urlOffset,
+      os_variant: OsVariant[app.application.os_variant ?? "Any"],
       ime_mode: app.application.ime_mode ?? -1,
       ime_on: app.application.ime_on ?? -1,
       keymap_len: app.application.keymaps?.length ?? 0,
@@ -181,5 +199,5 @@ export function ConvertApplication(
     };
   });
 
-  return [cApplications, array].flat();
+  return { cApplications, ApplicationData: array.flat() };
 }

@@ -1,4 +1,4 @@
-import { test } from "vitest";
+import { expect, test } from "vitest";
 import { type YamlSchema } from "../config";
 import jsyaml from "js-yaml";
 import {
@@ -14,6 +14,7 @@ test("ApplicationTest", () => {
     title: title - app1
     process: app"
     url: https://app1
+    os_variant: Windows
     keymaps:
       - keymap:
           layer: 0
@@ -45,4 +46,6 @@ test("ApplicationTest", () => {
     DefaultValuesDefault
   );
   console.log(capp);
+
+  expect(capp.cApplications[0].$value.os_variant).toBe(2);
 });
