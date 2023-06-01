@@ -166,7 +166,9 @@
           ],
           "properties": {
             "layer": {
-              "type": "integer"
+              "type": "integer",
+              "maximum": 15,
+              "minimum": 0
             },
             "map": {
               "type": "object",
