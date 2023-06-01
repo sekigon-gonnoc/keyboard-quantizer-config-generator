@@ -37,6 +37,9 @@ export function ConvertKeymaps(
   let keyAddress = cKeymaps.$buffer.byteLength + baseOffset;
   let keyCount = 0;
 
+  // keymaps is sort by layer number
+  keymaps.sort((ka, kb) => ka.keymap.layer - kb.keymap.layer);
+
   keymaps.forEach((keymap, idx) => {
     cKeymaps[idx].$value = {
       layer: keymap.keymap.layer,
@@ -49,11 +52,17 @@ export function ConvertKeymaps(
   });
 
   // align to 4 byte
+
   const ckeys = new (CKeycodes.times(keyCount))();
+  // keys in keymap are sorted by "from" keycodes
   keymaps
-    .flatMap((k) => Object.entries(k.keymap.map))
-    .flat()
-    .forEach((k, idx) => (ckeys[idx].$value = keycodeConverter(k)));
+    .map((k) =>
+      Object.entries(k.keymap.map)
+        .map((k) => [keycodeConverter(k[0]), keycodeConverter(k[1])])
+        .sort((a, b) => a[0] - b[0])
+    )
+    .flat(2)
+    .forEach((k, idx) => (ckeys[idx].$value = k));
 
   return { keymap_keys: ckeys, cKeymaps };
 }
