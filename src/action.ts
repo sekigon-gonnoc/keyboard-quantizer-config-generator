@@ -15,6 +15,8 @@ export interface Macro {
     | { action: "tap" | "down" | "up"; keycodes: string[] }
     | { action: "delay"; duration: number }
     | string
+    | Command
+    | UnicodeString
   >;
 }
 
@@ -28,21 +30,23 @@ export interface UnicodeString {
 
 export function ConvertMacros(
   macros: Array<Macro | Command | UnicodeString>,
-  baseOffset: number = 0
+  baseOffset: number = 0,
+  keycodeConverter: (action: Action) => number = Keycodes.ConvertAction
 ): {
   macroAddress: struct.array<struct.size_t>;
   macroDefinitions: struct.array<struct.uint8_t>;
 } {
-  const cMacroAddress = new (struct.size_t.times(macros.length))();
-  const offset = cMacroAddress.$buffer.byteLength + baseOffset;
-
+  const macroAddress: number[] = [];
   const macroDefinitions: number[] = [];
 
-  macros.forEach((m, idx) => {
-    cMacroAddress[idx].$value = offset + macroDefinitions.length;
+  // Because macros.length could increase in this loop,
+  // use for statement instead of forEach
+  for (let idx = 0; idx < macros.length; idx++) {
+    const m = macros[idx];
+    macroAddress.push(macroDefinitions.length);
     match(m)
       .with({ macro: P._ }, (macro) =>
-        macroDefinitions.push(...convertMacro(macro))
+        macroDefinitions.push(...convertMacro(macro, keycodeConverter))
       )
       .with({ command: P.string }, (command) =>
         macroDefinitions.push(...convertCommand(command))
@@ -51,6 +55,12 @@ export function ConvertMacros(
         macroDefinitions.push(...convertUnicodeString(str))
       )
       .exhaustive();
+  }
+
+  const cMacroAddress = new (struct.size_t.times(macros.length))();
+  const offset = cMacroAddress.$buffer.byteLength + baseOffset;
+  macroAddress.forEach((address, idx) => {
+    cMacroAddress[idx].$value = offset + address;
   });
 
   // align to 4 byte
@@ -69,7 +79,10 @@ export function ConvertMacros(
 
 const encoder = new TextEncoder();
 
-function convertMacro(macro: Macro): number[] {
+function convertMacro(
+  macro: Macro,
+  keycodeConverter: (action: Action) => number = Keycodes.ConvertAction
+): number[] {
   const macroDefinitions: number[] = [];
 
   // add enum to keyboard distinct macro type
@@ -83,25 +96,33 @@ function convertMacro(macro: Macro): number[] {
       })
       .with({ action: "tap" }, (tap) => {
         tap.keycodes.forEach((k) => {
-          const kc = Keycodes.ConvertBasic(k);
-          macroDefinitions.push(0x01, kc);
+          const kc = keycodeConverter(k);
+          macroDefinitions.push(0x01, kc & 0xff, kc >> 8);
         });
       })
       .with({ action: "down" }, (down) => {
         down.keycodes.forEach((k) => {
-          const kc = Keycodes.ConvertBasic(k);
-          macroDefinitions.push(0x02, kc);
+          const kc = keycodeConverter(k);
+          macroDefinitions.push(0x02, kc & 0xff, kc >> 8);
         });
       })
       .with({ action: "up" }, (up) => {
         up.keycodes.forEach((k) => {
-          const kc = Keycodes.ConvertBasic(k);
-          macroDefinitions.push(0x03, kc);
+          const kc = keycodeConverter(k);
+          macroDefinitions.push(0x03, kc & 0xff, kc >> 8);
         });
       })
       .with({ action: "delay" }, (delay) =>
         macroDefinitions.push(0x04, delay.duration & 0xff, delay.duration >> 8)
       )
+      .with({ command: P._ }, (command) => {
+        const kc = keycodeConverter(command);
+        macroDefinitions.push(0x01, kc & 0xff, kc >> 8);
+      })
+      .with({ unicode_string: P._ }, (unicodeString) => {
+        const kc = keycodeConverter(unicodeString);
+        macroDefinitions.push(0x01, kc & 0xff, kc >> 8);
+      })
       .exhaustive();
   });
   // add terminate char

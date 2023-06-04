@@ -35,7 +35,13 @@
             },
             "os_variant": {
               "type": "string",
-              "enum": ["Any", "Linux", "Windows", "macOS", "iOS"]
+              "enum": [
+                "Any",
+                "Linux",
+                "Windows",
+                "macOS",
+                "iOS"
+              ]
             },
             "ime_mode": {
               "type": "integer"
@@ -215,10 +221,10 @@
                 "hold"
               ]
             },
-            "press_in_order":{
+            "press_in_order": {
               "type": "boolean"
             },
-            "layer":{
+            "layer": {
               "type": "integer"
             }
           }
@@ -500,6 +506,12 @@
               },
               {
                 "type": "string"
+              },
+              {
+                "$ref": "#/definitions/Command"
+              },
+              {
+                "$ref": "#/definitions/UnicodeString"
               }
             ]
           },

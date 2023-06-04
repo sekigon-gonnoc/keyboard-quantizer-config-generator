@@ -197,7 +197,11 @@ export class ConfigConverter {
     const macroAddress = this.byteOffset;
     const macroLength = this.config.macros.length;
 
-    const cMacros = ConvertMacros(this.config.macros, macroAddress);
+    const cMacros = ConvertMacros(
+      this.config.macros,
+      macroAddress,
+      (action: Action) => this.convertAction(action)
+    );
 
     this.byteOffset += cMacros.macroAddress.$arrayBuffer.byteLength;
     this.byteOffset += cMacros.macroDefinitions.$arrayBuffer.byteLength;
@@ -209,7 +213,7 @@ export class ConfigConverter {
     this.cConfig = new CConfig();
     this.cConfig.$value = {
       magic_number: 0x999b999b,
-      version: 11,
+      version: 12,
       crc16: 0,
       body_length: 0,
       yaml_len: yamlLength,

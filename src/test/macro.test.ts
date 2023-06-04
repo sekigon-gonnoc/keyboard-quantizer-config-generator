@@ -19,7 +19,7 @@ test("TapMacro", () => {
     Uint8Array.from([4, 0, 0, 0])
   );
   expect(new Uint8Array(res.macroDefinitions.$buffer)).toEqual(
-    Uint8Array.from([1, 1, 4, 1, 5, 0, 0, 0])
+    Uint8Array.from([1, 1, 4, 0, 1, 5, 0, 0])
   );
 });
 
@@ -47,7 +47,9 @@ test("Combined", () => {
     Uint8Array.from([4, 0, 0, 0])
   );
   expect(new Uint8Array(res.macroDefinitions.$buffer)).toEqual(
-    Uint8Array.from([1, 2, 0xe0, 109, 97, 99, 114, 111, 3, 0xe0, 0, 0])
+    Uint8Array.from([
+      1, 2, 0xe0, 0, 109, 97, 99, 114, 111, 3, 0xe0, 0, 0, 0, 0, 0,
+    ])
   );
 });
 
