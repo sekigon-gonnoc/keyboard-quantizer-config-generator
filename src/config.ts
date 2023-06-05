@@ -47,6 +47,8 @@ export interface Config {
   perKeyOptions: PerKeyOption[];
 }
 
+export const CONFIG_VERSION = 12;
+
 interface CConfigProperty {
   magic_number: number;
   version: number;
@@ -213,7 +215,7 @@ export class ConfigConverter {
     this.cConfig = new CConfig();
     this.cConfig.$value = {
       magic_number: 0x999b999b,
-      version: 12,
+      version: CONFIG_VERSION,
       crc16: 0,
       body_length: 0,
       yaml_len: yamlLength,

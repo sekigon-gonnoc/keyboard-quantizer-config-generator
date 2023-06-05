@@ -1,4 +1,4 @@
-import { CConfig, ConfigConverter } from "./config.ts";
+import { CConfig, CONFIG_VERSION, ConfigConverter } from "./config.ts";
 import {
   editor,
   Uri,
@@ -34,6 +34,7 @@ setDiagnosticsOptions({
 });
 
 const initialEditorContent = `# See https://github.com/sekigon-gonnoc/keyboard-quantizer-doc/blob/master/mini/full_config.md for details
+# Config version: ${CONFIG_VERSION}
 - application:
     keymaps:
       - keymap:
