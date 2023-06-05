@@ -37,9 +37,9 @@ const initialEditorContent = `# See https://github.com/sekigon-gonnoc/keyboard-q
 # Config version: ${CONFIG_VERSION}
 - application:
     keymaps:
-      - keymap:
-          layer: 0
-          map:
+      - layer:
+          id: 0
+          keys:
             KC_CAPS: KC_LCTL
 `;
 

@@ -2,7 +2,7 @@ import { expect, test } from "vitest";
 import { ConvertKeymaps, type Keymap } from "../keymap";
 
 test("KeymapTest", () => {
-  const keymap: Keymap[] = [{ keymap: { layer: 0, map: { KC_A: "KC_B" } } }];
+  const keymap: Keymap[] = [{ layer: { id: 0, keys: { KC_A: "KC_B" } } }];
   const cKeymap = ConvertKeymaps(keymap, 0);
   expect(new Uint8Array(cKeymap.keymap_keys.$buffer)).toEqual(
     Uint8Array.from([4, 0, 5, 0])
@@ -14,8 +14,8 @@ test("KeymapTest", () => {
 
 test("KeymapTest2", () => {
   const keymap: Keymap[] = [
-    { keymap: { layer: 0, map: { KC_A: "KC_B" } } },
-    { keymap: { layer: 1, map: { KC_C: "KC_D", KC_E: "KC_F" } } },
+    { layer: { id: 0, keys: { KC_A: "KC_B" } } },
+    { layer: { id: 1, keys: { KC_C: "KC_D", KC_E: "KC_F" } } },
   ];
   const cKeymap = ConvertKeymaps(keymap, 0);
   expect(new Uint8Array(cKeymap.keymap_keys.$buffer)).toEqual(
@@ -28,8 +28,8 @@ test("KeymapTest2", () => {
 
 test("KeymapTest3", () => {
   const keymap: Keymap[] = [
-    { keymap: { layer: 1, map: { KC_E: "KC_F", KC_C: "KC_D" } } },
-    { keymap: { layer: 0, map: { KC_A: "KC_B" } } },
+    { layer: { id: 1, keys: { KC_E: "KC_F", KC_C: "KC_D" } } },
+    { layer: { id: 0, keys: { KC_A: "KC_B" } } },
   ];
   const cKeymap = ConvertKeymaps(keymap, 0);
   expect(new Uint8Array(cKeymap.keymap_keys.$buffer)).toEqual(

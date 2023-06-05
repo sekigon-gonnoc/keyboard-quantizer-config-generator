@@ -3,9 +3,9 @@ import { CKeycodes, Keycodes } from "./keycodes";
 import { type Action } from "./action";
 
 export interface Keymap {
-  keymap: {
-    layer: number;
-    map: Record<string, Action>;
+  layer: {
+    id: number;
+    keys?: Record<string, Action>;
   };
 }
 
@@ -38,12 +38,15 @@ export function ConvertKeymaps(
   let keyCount = 0;
 
   // keymaps is sort by layer number
-  keymaps.sort((ka, kb) => ka.keymap.layer - kb.keymap.layer);
+  keymaps.sort((ka, kb) => ka.layer.id - kb.layer.id);
 
   keymaps.forEach((keymap, idx) => {
     cKeymaps[idx].$value = {
-      layer: keymap.keymap.layer,
-      keys_len: Object.keys(keymap.keymap.map).length,
+      layer: keymap.layer.id,
+      keys_len:
+        keymap.layer.keys !== undefined
+          ? Object.keys(keymap.layer.keys).length
+          : 0,
       keys_addr: keyAddress,
     };
 
@@ -55,9 +58,13 @@ export function ConvertKeymaps(
 
   const ckeys = new (CKeycodes.times(keyCount))();
   // keys in keymap are sorted by "from" keycodes
-  keymaps
+  const keys = keymaps
+    .map((k) => k.layer.keys)
+    .filter((k) => k !== undefined) as Array<Record<string, Action>>;
+
+  keys
     .map((k) =>
-      Object.entries(k.keymap.map)
+      Object.entries(k)
         .map((k) => [keycodeConverter(k[0]), keycodeConverter(k[1])])
         .sort((a, b) => a[0] - b[0])
     )

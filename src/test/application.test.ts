@@ -16,14 +16,14 @@ test("ApplicationTest", () => {
     url: https://app1
     os_variant: Windows
     keymaps:
-      - keymap:
-          layer: 0
-          map:
+      - layer:
+          id: 0
+          keys:
             KC_A: KC_B
             KC_E: {tap_dance: {single_tap: KC_F, single_hold: TO(1), double_tap: {macro: [ macroInTd ]}}}
-      - keymap:
-          layer: 1
-          map:
+      - layer:
+          id: 1
+          keys:
             KC_B: KC_D
     combos:
       - combo:

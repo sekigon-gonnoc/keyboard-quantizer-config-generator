@@ -164,19 +164,18 @@
     "Keymap": {
       "type": "object",
       "properties": {
-        "keymap": {
+        "layer": {
           "type": "object",
           "required": [
-            "layer",
-            "map"
+            "id"
           ],
           "properties": {
-            "layer": {
+            "id": {
               "type": "integer",
               "maximum": 15,
               "minimum": 0
             },
-            "map": {
+            "keys": {
               "type": "object",
               "additionalProperties": {
                 "$ref": "#/definitions/Action"
@@ -186,7 +185,7 @@
         }
       },
       "required": [
-        "keymap"
+        "layer"
       ]
     },
     "Combo": {
