@@ -180,6 +180,9 @@
               "additionalProperties": {
                 "$ref": "#/definitions/Action"
               }
+            },
+            "mouse": {
+              "$ref": "#/definitions/Mouse"
             }
           }
         }
@@ -187,6 +190,32 @@
       "required": [
         "layer"
       ]
+    },
+    "Mouse": {
+      "type": "object",
+      "properties": {
+        "scale_x": {
+          "type": "number",
+          "minimum": -7,
+          "maximum": 7
+        },
+        "scale_y": {
+          "type": "number",
+          "minimum": -7,
+          "maximum": 7
+        },
+        "scale_v": {
+          "type": "number",
+          "minimum": -7,
+          "maximum": 7
+        },
+        "scale_h": {
+          "type": "number",
+          "minimum": -7,
+          "maximum": 7
+        },
+        "additionalProperties": false
+      }
     },
     "Combo": {
       "type": "object",

@@ -52,5 +52,23 @@
         "aliases": [
             "SET_OS_LANG_JP"
         ]
+    },
+    "0x00CD": {
+        "key": "MS_CURSOR_Y"
+    },
+    "0x00CF": {
+        "key": "MS_CURSOR_X"
+    },
+    "0x00D9": {
+        "key": "MS_CURSOR_SCROLL_V"
+    },
+    "0x00DA": {
+        "key": "MS_CURSOR_WHEEL_V"
+    },
+    "0x00DB": {
+        "key": "MS_CURSOR_SCROLL_H"
+    },
+    "0x00DC": {
+        "key": "MS_CURSOR_WHEEL_H"
     }
 }

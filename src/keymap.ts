@@ -1,11 +1,13 @@
 import * as struct from "node-c-struct";
 import { CKeycodes, Keycodes } from "./keycodes";
 import { type Action } from "./action";
+import { type Mouse, CMouse, type CMouseProperty, ConvertMouse } from "./mouse";
 
 export interface Keymap {
   layer: {
     id: number;
     keys?: Record<string, Action>;
+    mouse?: Mouse;
   };
 }
 
@@ -13,6 +15,7 @@ interface CKeymapProperty {
   layer: number;
   keys_len: number;
   keys_addr: number;
+  mouse: CMouseProperty;
 }
 
 export class CKeymap extends struct.struct<CKeymapProperty> {
@@ -21,6 +24,7 @@ export class CKeymap extends struct.struct<CKeymapProperty> {
       ["layer", struct.uint16_t],
       ["keys_len", struct.uint16_t],
       ["keys_addr", struct.size_t],
+      ["mouse", CMouse],
     ];
   }
 }
@@ -48,6 +52,7 @@ export function ConvertKeymaps(
           ? Object.keys(keymap.layer.keys).length
           : 0,
       keys_addr: keyAddress,
+      mouse: ConvertMouse(keymap.layer.mouse).$value,
     };
 
     keyAddress += cKeymaps[idx].$value.keys_len * 2 * CKeycodes.byteSize;

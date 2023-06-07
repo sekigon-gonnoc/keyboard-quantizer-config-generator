@@ -47,7 +47,7 @@ export interface Config {
   perKeyOptions: PerKeyOption[];
 }
 
-export const CONFIG_VERSION = 12;
+export const CONFIG_VERSION = 13;
 
 interface CConfigProperty {
   magic_number: number;
