@@ -65,6 +65,25 @@ const keycodeAliases = await fetch("https://keyboards.qmk.fm/v1/constants/keycod
     return kt;
   });
 
-const convertedTable = { ...keycodeBase, ...keycodeAliases, ...userTable };
+const jpKeycodeAliases = await fetch("https://keyboards.qmk.fm/v1/constants/keycodes_japanese_0.0.1.json", settings)
+  .then(res => res.json())
+  .then((json) => {
+    const kt = {};
+
+    for (const [keyCodeExpr, value] of Object.entries(json.aliases)) {
+      const match = keyCodeExpr.match(/^S\((.*)\)/);
+      if (match == null) {
+        kt[value.key] = keycodeBase[keyCodeExpr];
+      }
+      else if (match?.length > 1) {
+        const keycodeNumber = kt[match[1]] | (2 << 8);
+        kt[value.key] = keycodeNumber;
+      }
+    }
+
+    return kt;
+  });
+
+const convertedTable = { ...keycodeBase, ...keycodeAliases, ...jpKeycodeAliases, ...userTable };
 fs.writeFileSync(outputFilePath + "keycode_table_converted.json", JSON.stringify(convertedTable, null, 2));
 fs.writeFileSync(outputFilePath + "quantum_keycode_range.json", JSON.stringify(range, null, 2));
